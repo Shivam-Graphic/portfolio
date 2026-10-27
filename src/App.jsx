@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Mail, Phone, MapPin, ChevronRight } from 'lucide-react';
-import { profile, softwares, experience, education, categories } from './data';
+import { profile, softwares, experience, education, categories, projects } from './data';
 import './App.css';
+
+const ITEMS_PER_PAGE = 6;
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +31,23 @@ function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Reset visible count when category changes
+  useEffect(() => {
+    setVisibleCount(ITEMS_PER_PAGE);
+  }, [activeCategory]);
+
+  const filteredProjects = useMemo(() => {
+    if (activeCategory === 'all') return projects;
+    return projects.filter((p) => p.category === activeCategory);
+  }, [activeCategory]);
+
+  const visibleProjects = filteredProjects.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredProjects.length;
+
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
+  };
 
   const navLinks = [
     { id: 'home', label: 'Home' },
@@ -284,49 +305,76 @@ function App() {
             </p>
           </div>
 
+          {/* Category Tabs */}
           <div className="flex flex-wrap justify-center gap-2 mb-10">
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                className="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors"
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  activeCategory === cat.id
+                    ? 'bg-primary-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-primary-50 hover:text-primary-700'
+                }`}
               >
                 {cat.name}
               </button>
             ))}
           </div>
 
+          {/* Projects Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="card group cursor-pointer">
+            {visibleProjects.map((project) => (
+              <div key={project.id} className="card group cursor-pointer">
                 <div className="aspect-[4/3] bg-gradient-to-br from-primary-100 to-blue-50 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-primary-900/0 group-hover:bg-primary-900/60 transition-all duration-300 flex items-center justify-center">
                     <ExternalLink className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={28} />
                   </div>
-                  <span className="text-primary-300 font-display font-bold text-4xl">0{i}</span>
+                  <span className="text-primary-300 font-display font-bold text-4xl">
+                    {String(project.id).padStart(2, '0')}
+                  </span>
                 </div>
                 <div className="p-4">
-                  <p className="text-xs text-primary-600 font-medium mb-1">Social Media Post</p>
-                  <h4 className="font-semibold text-gray-900">Project Title {i}</h4>
-                  <p className="text-sm text-gray-500 mt-1">Client Name</p>
+                  <p className="text-xs text-primary-600 font-medium mb-1">{project.tag}</p>
+                  <h4 className="font-semibold text-gray-900">{project.title}</h4>
+                  <p className="text-sm text-gray-500 mt-1">{project.client}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="text-center mt-10">
-            <p className="text-gray-500 text-sm mb-4">
-              Project images will load from CMS once configured. Add your real work screenshots later.
-            </p>
-            <a
-              href={profile.socials.behance}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-outline"
-            >
-              View Full Portfolio on Behance
-              <ExternalLink size={16} className="ml-2" />
-            </a>
-          </div>
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="text-center mt-10">
+              <button
+                onClick={loadMore}
+                className="btn-primary"
+              >
+                Load More
+                <ChevronRight size={18} className="ml-1" />
+              </button>
+              <p className="text-sm text-gray-500 mt-3">
+                Showing {visibleProjects.length} of {filteredProjects.length} projects
+              </p>
+            </div>
+          )}
+
+          {!hasMore && filteredProjects.length > 0 && (
+            <div className="text-center mt-10">
+              <p className="text-sm text-gray-500 mb-4">
+                Showing all {filteredProjects.length} projects
+              </p>
+              <a
+                href={profile.socials.behance}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline"
+              >
+                View Full Portfolio on Behance
+                <ExternalLink size={16} className="ml-2" />
+              </a>
+            </div>
+          )}
         </div>
       </section>
 
