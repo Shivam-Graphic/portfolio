@@ -1,7 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Mail, Phone, MapPin, ChevronRight, Sun, Moon, Briefcase, GraduationCap } from 'lucide-react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Mail, Phone, MapPin, ChevronRight, Sun, Moon, Briefcase, GraduationCap, Download } from 'lucide-react';
 import { profile, softwares, experience, education, categories, projects } from './data';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './App.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ITEMS_PER_PAGE = 6;
 
@@ -14,9 +18,15 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const heroRef = useRef(null);
+  const aboutRef = useRef(null);
+  const expRef = useRef(null);
+  const workRef = useRef(null);
+  const contactRef = useRef(null);
+
   // Loader
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
+    const timer = setTimeout(() => setLoading(false), 1100);
     return () => clearTimeout(timer);
   }, []);
 
@@ -42,6 +52,111 @@ function App() {
       return next;
     });
   };
+
+  // GSAP Scroll Animations
+  useEffect(() => {
+    if (loading) return;
+
+    const ctx = gsap.context(() => {
+      // Hero
+      gsap.from('.hero-content > *', {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: 'power3.out',
+        delay: 0.2,
+      });
+      gsap.from('.hero-image', {
+        scale: 0.9,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        delay: 0.1,
+      });
+
+      // Section titles
+      gsap.utils.toArray('.section-title').forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+        });
+      });
+
+      // About cards
+      gsap.utils.toArray('.about-card').forEach((el, i) => {
+        gsap.from(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+          },
+          y: 40,
+          opacity: 0,
+          duration: 0.7,
+          delay: i * 0.1,
+          ease: 'power3.out',
+        });
+      });
+
+      // Experience items
+      gsap.utils.toArray('.exp-item').forEach((el, i) => {
+        gsap.from(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+          },
+          x: -30,
+          opacity: 0,
+          duration: 0.7,
+          delay: i * 0.15,
+          ease: 'power3.out',
+        });
+      });
+
+      // Work cards
+      gsap.utils.toArray('.work-card').forEach((el, i) => {
+        gsap.from(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 92%',
+            toggleActions: 'play none none none',
+          },
+          y: 40,
+          opacity: 0,
+          duration: 0.6,
+          delay: (i % 3) * 0.08,
+          ease: 'power3.out',
+        });
+      });
+
+      // Contact cards
+      gsap.utils.toArray('.contact-card').forEach((el, i) => {
+        gsap.from(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.7,
+          delay: i * 0.12,
+          ease: 'power3.out',
+        });
+      });
+    });
+
+    return () => ctx.revert();
+  }, [loading]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,7 +205,6 @@ function App() {
     setIsMenuOpen(false);
   };
 
-  // Loader Screen
   if (loading) {
     return (
       <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white dark:bg-gray-950 transition-colors">
@@ -109,8 +223,8 @@ function App() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 transition-colors duration-300">
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800' 
+        scrolled
+          ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800'
           : 'bg-transparent'
       }`}>
         <div className="container-custom flex items-center justify-between h-16 md:h-20">
@@ -141,7 +255,6 @@ function App() {
           </nav>
 
           <div className="flex items-center gap-2">
-            {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
               className="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/40 hover:text-primary-600 transition-colors"
@@ -168,8 +281,8 @@ function App() {
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
                   className={`px-4 py-3 rounded-lg text-left font-medium ${
-                    activeSection === link.id 
-                      ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300' 
+                    activeSection === link.id
+                      ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300'
                       : 'text-gray-700 dark:text-gray-300'
                   }`}
                 >
@@ -182,13 +295,13 @@ function App() {
       </header>
 
       {/* Hero */}
-      <section id="home" className="pt-24 md:pt-32 pb-16 md:pb-24 relative overflow-hidden">
+      <section id="home" ref={heroRef} className="pt-24 md:pt-32 pb-16 md:pb-24 relative overflow-hidden">
         <div className="absolute top-20 right-0 w-72 h-72 bg-primary-200/40 dark:bg-primary-900/20 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/50 dark:bg-blue-900/10 rounded-full blur-3xl -z-10" />
-        
+
         <div className="container-custom">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative flex justify-center lg:justify-start order-1">
+            <div className="relative flex justify-center lg:justify-start order-1 hero-image">
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-br from-primary-500 to-blue-400 rounded-3xl rotate-3 opacity-20 dark:opacity-30" />
                 <div className="absolute -inset-4 bg-primary-600/10 dark:bg-primary-500/10 rounded-3xl -rotate-2" />
@@ -203,12 +316,12 @@ function App() {
                 </div>
                 <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg px-4 py-3 flex items-center gap-2 border border-gray-100 dark:border-gray-700">
                   <span className="text-2xl font-display font-bold text-primary-600 dark:text-primary-400">{profile.yearsExp}</span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400 leading-tight">YEARS<br/>EXP.</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 leading-tight">YEARS<br />EXP.</span>
                 </div>
               </div>
             </div>
 
-            <div className="text-center lg:text-left order-2">
+            <div className="text-center lg:text-left order-2 hero-content">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium mb-4">
                 <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
                 Available for work
@@ -229,9 +342,14 @@ function App() {
                   View My Work
                   <ChevronRight size={18} className="ml-1" />
                 </button>
-                <button onClick={() => scrollTo('contact')} className="btn-outline">
-                  Contact Me
-                </button>
+                <a
+                  href="/portfolio/CV.pdf"
+                  download="Shivam_Sharma_CV.pdf"
+                  className="btn-outline"
+                >
+                  <Download size={18} className="mr-2" />
+                  Download CV
+                </a>
               </div>
 
               <div>
@@ -253,16 +371,16 @@ function App() {
       </section>
 
       {/* About */}
-      <section id="about" className="section-padding bg-white dark:bg-gray-900/50">
+      <section id="about" ref={aboutRef} className="section-padding bg-white dark:bg-gray-900/50">
         <div className="container-custom">
-          <div className="text-center mb-14">
+          <div className="text-center mb-14 section-title">
             <h2 className="heading-display text-3xl md:text-4xl text-gray-900 dark:text-white mb-3">About Me</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-blue-500 mx-auto rounded-full" />
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-start">
             <div className="space-y-6">
-              <div className="card p-6">
+              <div className="card p-6 about-card">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600">
                     <Briefcase size={16} />
@@ -273,7 +391,7 @@ function App() {
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{profile.bio2}</p>
               </div>
 
-              <div className="card p-6">
+              <div className="card p-6 about-card">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600">
                     <GraduationCap size={16} />
@@ -296,7 +414,7 @@ function App() {
               </div>
             </div>
 
-            <div className="card p-6">
+            <div className="card p-6 about-card">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Skills & Tools</h3>
               <div className="space-y-5">
                 {softwares.map((sw) => (
@@ -324,51 +442,45 @@ function App() {
         </div>
       </section>
 
-      {/* Experience - Improved */}
-      <section id="experience" className="section-padding">
+      {/* Experience - Clean Vertical Timeline */}
+      <section id="experience" ref={expRef} className="section-padding">
         <div className="container-custom">
-          <div className="text-center mb-14">
+          <div className="text-center mb-14 section-title">
             <h2 className="heading-display text-3xl md:text-4xl text-gray-900 dark:text-white mb-3">Work Experience</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-blue-500 mx-auto rounded-full" />
           </div>
 
-          <div className="max-w-3xl mx-auto relative">
-            {/* Timeline line */}
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-400 to-primary-200 dark:from-primary-600 dark:to-primary-900 -translate-x-1/2 hidden md:block" />
+          <div className="max-w-2xl mx-auto relative">
+            {/* Vertical line */}
+            <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-primary-400 via-primary-300 to-primary-200 dark:from-primary-600 dark:via-primary-700 dark:to-primary-900" />
 
-            <div className="space-y-10">
-              {experience.map((exp, index) => (
-                <div key={exp.id} className={`relative flex flex-col md:flex-row gap-6 ${
-                  index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                }`}>
-                  {/* Timeline dot */}
-                  <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-primary-600 border-4 border-white dark:border-gray-950 -translate-x-1/2 z-10 hidden md:block" />
+            <div className="space-y-8">
+              {experience.map((exp) => (
+                <div key={exp.id} className="relative pl-12 exp-item">
+                  {/* Dot */}
+                  <div className="absolute left-0 top-5 w-10 h-10 rounded-full bg-primary-600 border-4 border-white dark:border-gray-950 shadow-md flex items-center justify-center z-10">
+                    <Briefcase size={14} className="text-white" />
+                  </div>
 
-                  <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:pr-10 md:text-right' : 'md:pl-10'}`}>
-                    <div className="card p-6 hover:-translate-y-1 transition-transform duration-300">
-                      <div className={`flex flex-col gap-2 mb-4 ${
-                        index % 2 === 0 ? 'md:items-end' : 'md:items-start'
-                      }`}>
-                        <span className="inline-flex items-center px-3 py-1 bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-sm font-medium rounded-full w-fit">
-                          {exp.period}
-                        </span>
+                  <div className="card p-6 hover:-translate-y-1 transition-transform duration-300">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+                      <div>
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{exp.role}</h3>
                         <p className="text-primary-600 dark:text-primary-400 font-medium">{exp.company}</p>
                       </div>
-                      <ul className={`space-y-2.5 ${index % 2 === 0 ? 'md:text-right' : ''}`}>
-                        {exp.points.map((point, i) => (
-                          <li key={i} className={`flex gap-3 text-gray-600 dark:text-gray-300 text-sm ${
-                            index % 2 === 0 ? 'md:flex-row-reverse' : ''
-                          }`}>
-                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary-400 flex-shrink-0" />
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <span className="inline-flex items-center px-3 py-1 bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-sm font-medium rounded-full w-fit">
+                        {exp.period}
+                      </span>
                     </div>
+                    <ul className="space-y-2.5">
+                      {exp.points.map((point, i) => (
+                        <li key={i} className="flex gap-3 text-gray-600 dark:text-gray-300 text-sm">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary-400 flex-shrink-0" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
-                  <div className="md:w-1/2" />
                 </div>
               ))}
             </div>
@@ -377,9 +489,9 @@ function App() {
       </section>
 
       {/* Work */}
-      <section id="work" className="section-padding bg-white dark:bg-gray-900/50">
+      <section id="work" ref={workRef} className="section-padding bg-white dark:bg-gray-900/50">
         <div className="container-custom">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 section-title">
             <h2 className="heading-display text-3xl md:text-4xl text-gray-900 dark:text-white mb-3">My Work</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-blue-500 mx-auto rounded-full mb-4" />
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -405,7 +517,7 @@ function App() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleProjects.map((project) => (
-              <div key={project.id} className="card group cursor-pointer hover:-translate-y-1">
+              <div key={project.id} className="card group cursor-pointer hover:-translate-y-1 work-card">
                 <div className="aspect-[4/3] bg-gradient-to-br from-primary-100 to-blue-50 dark:from-primary-900/40 dark:to-blue-900/20 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-primary-900/0 group-hover:bg-primary-900/60 transition-all duration-300 flex items-center justify-center">
                     <ExternalLink className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={28} />
@@ -450,15 +562,15 @@ function App() {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="section-padding">
+      <section id="contact" ref={contactRef} className="section-padding">
         <div className="container-custom">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 section-title">
             <h2 className="heading-display text-3xl md:text-4xl text-gray-900 dark:text-white mb-3">Get In Touch</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-blue-500 mx-auto rounded-full" />
           </div>
 
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-            <div className="card p-8">
+            <div className="card p-8 contact-card">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Contact Info</h3>
               <div className="space-y-5">
                 <a href={`mailto:${profile.email}`} className="flex items-center gap-4 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
@@ -489,9 +601,18 @@ function App() {
                   </div>
                 </div>
               </div>
+
+              <a
+                href="/portfolio/CV.pdf"
+                download="Shivam_Sharma_CV.pdf"
+                className="btn-primary w-full mt-8 justify-center"
+              >
+                <Download size={18} className="mr-2" />
+                Download CV
+              </a>
             </div>
 
-            <div className="card p-8">
+            <div className="card p-8 contact-card">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Follow Me</h3>
               <div className="grid grid-cols-2 gap-4">
                 <a href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
