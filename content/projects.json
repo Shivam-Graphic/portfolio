@@ -1,8 +1,46 @@
 [
-  { "id": 1, "title": "Guru Nanak Jayanti Post", "category": "social-posts", "client": "GigSoft Pro", "tag": "Social Media Post" },
-  { "id": 2, "title": "Happy Diwali Creative", "category": "social-posts", "client": "GigSoft Pro", "tag": "Social Media Post" },
-  { "id": 3, "title": "Republic Day Design", "category": "social-posts", "client": "GigSoft Pro", "tag": "Social Media Post" },
-  { "id": 13, "title": "Digital Marketing Course Reel", "category": "reels", "client": "GigSoft Pro", "tag": "Social Media Reel" },
-  { "id": 21, "title": "Food Fusion Logo", "category": "logos", "client": "Food Fusion", "tag": "Visual Identity" },
-  { "id": 27, "title": "Almonds Packaging", "category": "packaging", "client": "Crazy Nuts", "tag": "Packaging Design" }
+  {
+    "id": 1,
+    "title": "Guru Nanak Jayanti Post",
+    "category": "social-posts",
+    "client": "GigSoft Pro",
+    "tag": "Social Media Post",
+    "image": "/media/1793195844231-inter.jpg",
+    "link": ""
+  },
+  {
+    "id": 2,
+    "title": "Happy Diwali Creative",
+    "category": "social-posts",
+    "client": "GigSoft Pro",
+    "tag": "Social Media Post"
+  },
+  {
+    "id": 3,
+    "title": "Republic Day Design",
+    "category": "social-posts",
+    "client": "GigSoft Pro",
+    "tag": "Social Media Post"
+  },
+  {
+    "id": 13,
+    "title": "Digital Marketing Course Reel",
+    "category": "reels",
+    "client": "GigSoft Pro",
+    "tag": "Social Media Reel"
+  },
+  {
+    "id": 21,
+    "title": "Food Fusion Logo",
+    "category": "logos",
+    "client": "Food Fusion",
+    "tag": "Visual Identity"
+  },
+  {
+    "id": 27,
+    "title": "Almonds Packaging",
+    "category": "packaging",
+    "client": "Crazy Nuts",
+    "tag": "Packaging Design"
+  }
 ]
