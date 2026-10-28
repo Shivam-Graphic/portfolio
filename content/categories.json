@@ -1,9 +1,30 @@
 [
-  { "id": "all", "name": "All Work" },
-  { "id": "social-posts", "name": "Social Media Posts" },
-  { "id": "reels", "name": "Reels & Shorts" },
-  { "id": "logos", "name": "Logo & Brand Identity" },
-  { "id": "packaging", "name": "Packaging Design" },
-  { "id": "ads", "name": "Ads & Covers" },
-  { "id": "other", "name": "Other Work" }
+  {
+    "id": "social-posts",
+    "name": "Social Media Posts"
+  },
+  {
+    "id": "reels",
+    "name": "Social Media Reels"
+  },
+  {
+    "id": "logos",
+    "name": "Logo & Brand Identity"
+  },
+  {
+    "id": "packaging",
+    "name": "Packaging Design"
+  },
+  {
+    "id": "ads",
+    "name": "Ads Design"
+  },
+  {
+    "id": "cover design",
+    "name": "GMB Post & Facebook Cover Design"
+  },
+  {
+    "id": "other",
+    "name": "Other Work"
+  }
 ]
