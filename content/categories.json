@@ -1,0 +1,9 @@
+[
+  { "id": "all", "name": "All Work" },
+  { "id": "social-posts", "name": "Social Media Posts" },
+  { "id": "reels", "name": "Reels & Shorts" },
+  { "id": "logos", "name": "Logo & Brand Identity" },
+  { "id": "packaging", "name": "Packaging Design" },
+  { "id": "ads", "name": "Ads & Covers" },
+  { "id": "other", "name": "Other Work" }
+]

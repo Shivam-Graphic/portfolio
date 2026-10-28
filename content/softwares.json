@@ -1,0 +1,7 @@
+[
+  { "name": "Photoshop", "icon": "Ps", "level": 90 },
+  { "name": "Illustrator", "icon": "Ai", "level": 85 },
+  { "name": "Canva", "icon": "Canva", "level": 95 },
+  { "name": "CapCut", "icon": "CapCut", "level": 88 },
+  { "name": "Figma", "icon": "Figma", "level": 70 }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "company": "GigSoft Pro",
+    "role": "Graphic Designer & Video Editor",
+    "period": "Aug 2025 – Sep 2026",
+    "logo": null,
+    "points": [
+      "Led the daily production of social media graphics and video Reels for a diverse roster of clients, including travel services, beauty spas, teeth-whitening products, and consulting firms.",
+      "Streamlined the creative workflow for lifestyle and service brands, delivering engaging visual content quickly to meet tight daily deadlines."
+    ]
+  },
+  {
+    "id": 2,
+    "company": "Vibrantick Infotech Solutions",
+    "role": "Graphic Designer",
+    "period": "Jun 2024 – Jun 2025",
+    "logo": null,
+    "points": [
+      "Produced a high volume of daily social media graphics for demanding industries such as real estate, education, and immigration.",
+      "Sourced, edited, and optimized images for critical website layouts, including homepage banners, sliders, and breadcrumbs.",
+      "Designed eye-catching Reels for a travel agency, boosting their social media presence and online storytelling."
+    ]
+  }
+]

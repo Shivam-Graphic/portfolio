@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio CMS - Shivam</title>
+  <style>
+    :root { --bg:#0a0e1a; --panel:#0d1220; --card:#111827; --line:#1e293b; --text:#f1f5f9; --muted:#94a3b8; --blue:#3b82f6; --blue2:#60a5fa; --green:#34d399; --red:#f87171; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:14px Inter, system-ui, sans-serif; }
+    .login-wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+    .login-card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:40px; max-width:400px; width:100%; text-align:center; }
+    h1 { font-size:24px; margin:0 0 8px; } .blue { color:var(--blue2); }
+    .sub { color:var(--muted); margin:0 0 24px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 20px; border-radius:10px; font-weight:600; text-decoration:none; border:none; cursor:pointer; }
+    .btn.primary { background:linear-gradient(100deg,#2563eb,#3b82f6); color:#fff; }
+    .app { min-height:100vh; display:grid; grid-template-columns:240px 1fr; }
+    .side { background:var(--panel); border-right:1px solid var(--line); padding:20px 14px; }
+    .brand { font-size:18px; font-weight:800; padding:8px 10px 20px; }
+    .nav button { display:block; width:100%; text-align:left; background:transparent; border:1px solid transparent; color:#94a3b8; padding:10px 11px; border-radius:10px; margin:2px 0; cursor:pointer; }
+    .nav button:hover, .nav button.active { background:#111827; border-color:#1e293b; color:var(--blue2); }
+    .main { padding:28px 34px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+    textarea { width:100%; min-height:400px; background:#0a0e1a; color:var(--text); border:1px solid var(--line); border-radius:10px; padding:14px; font-family:monospace; font-size:13px; }
+    .actions { display:flex; gap:8px; margin-top:16px; }
+    .status { font-size:13px; color:var(--muted); margin-top:10px; }
+    .status.success { color:var(--green); } .status.error { color:var(--red); }
+    .group { font-size:10px; text-transform:uppercase; letter-spacing:.14em; color:#64748b; padding:14px 10px 7px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    const SECTIONS = [
+      { path: "content/profile.json", name: "Profile" },
+      { path: "content/softwares.json", name: "Softwares" },
+      { path: "content/experience.json", name: "Experience" },
+      { path: "content/education.json", name: "Education" },
+      { path: "content/categories.json", name: "Categories" },
+      { path: "content/projects.json", name: "Projects" },
+    ];
+    let active = SECTIONS[0].path;
+    let data = null;
+    let sha = null;
+    const root = document.getElementById("root");
+
+    async function api(url, opts = {}) {
+      const res = await fetch(url, { credentials: "include", ...opts });
+      if (res.status === 401) { showLogin(); throw new Error("Unauthorized"); }
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || res.statusText);
+      return json;
+    }
+
+    function showLogin() {
+      root.innerHTML = `<div class="login-wrap"><section class="login-card"><h1>Portfolio <span class="blue">CMS</span></h1><p class="sub">Sign in with GitHub to manage content.</p><a class="btn primary" href="/api/admin/login">Login with GitHub</a></section></div>`;
+    }
+
+    async function loadFile(path) {
+      active = path;
+      const status = document.getElementById("status");
+      if (status) status.textContent = "Loading...";
+      try {
+        const res = await api("/api/admin/content?path=" + encodeURIComponent(path));
+        data = res.content;
+        sha = res.sha;
+        render();
+        document.getElementById("editor").value = data;
+        document.getElementById("status").textContent = "Ready";
+      } catch (e) {
+        if (e.message !== "Unauthorized") alert(e.message);
+      }
+    }
+
+    async function save() {
+      const content = document.getElementById("editor").value;
+      const status = document.getElementById("status");
+      status.textContent = "Saving...";
+      status.className = "status";
+      try {
+        JSON.parse(content);
+        await api("/api/admin/content?path=" + encodeURIComponent(active), {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        });
+        status.textContent = "Published successfully!";
+        status.className = "status success";
+      } catch (e) {
+        status.textContent = e.message || "Save failed";
+        status.className = "status error";
+      }
+    }
+
+    function render() {
+      const sec = SECTIONS.find(s => s.path === active) || { name: "Content" };
+      root.innerHTML = `<div class="app">
+        <aside class="side">
+          <div class="brand">Portfolio <span class="blue">CMS</span></div>
+          <nav class="nav">
+            <div class="group">Content</div>
+            ${SECTIONS.map(s => `<button type="button" class="${s.path===active?"active":""}" data-file="${s.path}">${s.name}</button>`).join("")}
+            <div class="group">Account</div>
+            <button type="button" id="logoutSide" style="color:#fca5a5">Logout</button>
+          </nav>
+        </aside>
+        <main class="main">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div><h1 style="margin:0">${sec.name}</h1><p class="sub">Edit JSON and publish</p></div>
+            <div class="actions">
+              <a class="btn" href="/" target="_blank">Preview Site</a>
+              <button type="button" class="btn primary" id="publish">Publish Changes</button>
+            </div>
+          </div>
+          <section class="card">
+            <textarea id="editor" spellcheck="false"></textarea>
+            <div id="status" class="status">Ready</div>
+          </section>
+        </main>
+      </div>`;
+      document.querySelectorAll("[data-file]").forEach(b => b.onclick = () => loadFile(b.dataset.file));
+      document.getElementById("publish").onclick = save;
+      document.getElementById("logoutSide").onclick = async () => {
+        try { await fetch("/api/admin/logout", { method: "POST", credentials: "include" }); } catch {}
+        showLogin();
+      };
+      if (data) document.getElementById("editor").value = data;
+    }
+
+    async function start() {
+      try {
+        await api("/api/admin/content?path=" + encodeURIComponent(SECTIONS[0].path));
+        await loadFile(SECTIONS[0].path);
+      } catch {
+        showLogin();
+      }
+    }
+    start();
+  </script>
+</body>
+</html>
