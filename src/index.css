@@ -30,14 +30,14 @@
            hover:bg-primary-600 hover:text-white transition-all duration-300 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-500 dark:hover:text-white;
   }
   .card {
-    @apply bg-white dark:bg-gray-800/80 rounded-2xl shadow-soft hover:shadow-card transition-all duration-300 overflow-hidden border border-transparent dark:border-gray-700/50;
+    @apply bg-white dark:bg-gray-800/80 rounded-2xl shadow-soft hover:shadow-card transition-all duration-300 border border-transparent dark:border-gray-700/50;
+    /* overflow-hidden removed — it was clipping Education/Experience text */
   }
   .glass {
     @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-md;
   }
 }
 
-/* Loader animation */
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
 }
