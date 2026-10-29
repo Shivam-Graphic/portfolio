@@ -223,18 +223,18 @@ function App() {
             <div className="space-y-6">
               <div className="card p-6">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><Briefcase size={16} className="text-primary-600" /> Who I Am</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{profile.bio}</p>
-                <p className="text-gray-600 dark:text-gray-300">{profile.bio2}</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-4 break-words">{profile.bio}</p>
+                <p className="text-gray-600 dark:text-gray-300 break-words">{profile.bio2}</p>
               </div>
               <div className="card p-6">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><GraduationCap size={16} className="text-primary-600" /> Education</h3>
                 <div className="space-y-4">
                   {education.map((edu, i) => (
-                    <div key={i} className="flex gap-4">
-                      <span className="px-3 py-1 bg-primary-50 dark:bg-primary-900/40 text-primary-700 text-xs font-medium rounded-full">{edu.year}</span>
-                      <div>
-                        <p className="font-medium">{edu.title}</p>
-                        <p className="text-sm text-gray-500">{edu.institution}</p>
+                    <div key={i} className="flex gap-3 items-start">
+                      <span className="px-3 py-1 bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-xs font-medium rounded-full whitespace-nowrap shrink-0">{edu.year}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-gray-900 dark:text-white break-words">{edu.title}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 break-words">{edu.institution}</p>
                       </div>
                     </div>
                   ))}
@@ -279,16 +279,19 @@ function App() {
                     <Briefcase size={14} className="text-white" />
                   </div>
                   <div className="card p-6">
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-4">
-                      <div>
-                        <h3 className="text-xl font-semibold">{exp.role}</h3>
-                        <p className="text-primary-600 font-medium">{exp.company}</p>
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-xl font-semibold break-words">{exp.role}</h3>
+                        <p className="text-primary-600 dark:text-primary-400 font-medium break-words">{exp.company}</p>
                       </div>
-                      <span className="px-3 py-1 bg-primary-50 dark:bg-primary-900/40 text-primary-700 text-sm rounded-full w-fit">{exp.period}</span>
+                      <span className="px-3 py-1 bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-sm rounded-full w-fit shrink-0 whitespace-nowrap">{exp.period}</span>
                     </div>
                     <ul className="space-y-2">
                       {(exp.points || []).map((point, i) => (
-                        <li key={i} className="flex gap-2 text-gray-600 dark:text-gray-300 text-sm"><span className="text-primary-500">•</span>{point}</li>
+                        <li key={i} className="flex gap-2 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                          <span className="text-primary-500 shrink-0 mt-0.5">•</span>
+                          <span className="min-w-0 break-words">{point}</span>
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -317,7 +320,7 @@ function App() {
             {visibleProjects.map((project) => (
               <a key={project.id} href={project.link || undefined} target={project.link ? '_blank' : undefined} rel={project.link ? 'noopener noreferrer' : undefined}
                 className="card group hover:-translate-y-1 work-card block" onClick={(e) => { if (!project.link) e.preventDefault(); }}>
-                <div className="aspect-[4/3] bg-gradient-to-br from-primary-100 to-blue-50 dark:from-primary-900/40 dark:to-blue-900/20 relative overflow-hidden flex items-center justify-center">
+                <div className="aspect-[4/3] bg-gradient-to-br from-primary-100 to-blue-50 dark:from-primary-900/40 dark:to-blue-900/20 relative overflow-hidden flex items-center justify-center rounded-t-2xl">
                   {project.image ? (
                     <img src={project.image} alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
@@ -329,8 +332,8 @@ function App() {
                 </div>
                 <div className="p-4">
                   <span className="text-xs font-medium text-primary-600">{project.tag}</span>
-                  <h4 className="font-semibold mt-1">{project.title}</h4>
-                  <p className="text-sm text-gray-500 mt-1">{project.client}</p>
+                  <h4 className="font-semibold mt-1 break-words">{project.title}</h4>
+                  <p className="text-sm text-gray-500 mt-1 break-words">{project.client}</p>
                 </div>
               </a>
             ))}
@@ -363,7 +366,7 @@ function App() {
             <div className="card p-6 text-center">
               <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600"><MapPin size={22} /></div>
               <h3 className="font-semibold mb-1">Location</h3>
-              <p className="text-sm text-gray-500">{profile.location}</p>
+              <p className="text-sm text-gray-500 break-words">{profile.location}</p>
             </div>
           </div>
           <div className="flex justify-center gap-4 mt-10">
