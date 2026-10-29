@@ -1,5 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <rect width="48" height="48" rx="10" fill="#000"/>
-  <path d="M14 16h8l6 16h-8l-6-16zm12 0h8l6 16h-8l-6-16z" fill="#fff"/>
-  <circle cx="24" cy="24" r="3" fill="#00C8C8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="cc-bg" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3A3A3A"/>
+      <stop offset="0.5" stop-color="#111"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="cc-mark" x1="18" y1="18" x2="46" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset="1" stop-color="#CFCFCF"/>
+    </linearGradient>
+    <linearGradient id="cc-shine" x1="12" y1="6" x2="40" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="cc-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#cc-bg)" filter="url(#cc-shadow)"/>
+  <path d="M20 20h10l8 24H28L20 20zm14 0h10l8 24H42L34 20z" fill="url(#cc-mark)"/>
+  <circle cx="32" cy="32" r="4" fill="#00E5E5"/>
+  <circle cx="32" cy="32" r="2" fill="#fff" opacity="0.5"/>
+  <rect x="4" y="4" width="56" height="24" rx="14" fill="url(#cc-shine)"/>
 </svg>
