@@ -1,7 +1,7 @@
 [
-  { "name": "Photoshop", "icon": "Ps", "level": 90 },
-  { "name": "Illustrator", "icon": "Ai", "level": 85 },
-  { "name": "Canva", "icon": "Canva", "level": 95 },
-  { "name": "CapCut", "icon": "CapCut", "level": 88 },
-  { "name": "Figma", "icon": "Figma", "level": 70 }
+  { "name": "Photoshop", "icon": "Ps", "color": "#31A8FF", "level": 90 },
+  { "name": "Illustrator", "icon": "Ai", "color": "#FF9A00", "level": 85 },
+  { "name": "Canva", "icon": "Ca", "color": "#00C4CC", "level": 95 },
+  { "name": "CapCut", "icon": "Cc", "color": "#000000", "level": 88 },
+  { "name": "Figma", "icon": "Fi", "color": "#F24E1E", "level": 70 }
 ]
