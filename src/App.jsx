@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Menu, X, Linkedin, Instagram, Youtube, ExternalLink, Mail, Phone, MapPin, ChevronRight, Sun, Moon, Briefcase, GraduationCap, Download } from 'lucide-react';
 import { loadAllContent } from './data';
+import SkillIcon from './SkillIcon';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './App.css';
@@ -201,7 +202,7 @@ function App() {
                 <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
                   {softwares.map((sw) => (
                     <div key={sw.name} className="flex items-center gap-2 bg-white dark:bg-gray-800 px-3 py-2 rounded-lg border border-gray-100 dark:border-gray-700">
-                      <span className="w-8 h-8 rounded-md bg-primary-50 dark:bg-primary-900/40 text-primary-700 flex items-center justify-center text-xs font-bold">{(sw.icon || '').slice(0, 2)}</span>
+                      <SkillIcon icon={sw.icon} name={sw.name} color={sw.color} size={32} />
                       <span className="text-sm font-medium">{sw.name}</span>
                     </div>
                   ))}
@@ -245,12 +246,15 @@ function App() {
               <div className="space-y-5">
                 {softwares.map((sw) => (
                   <div key={sw.name}>
-                    <div className="flex justify-between mb-1.5">
-                      <span className="text-sm font-medium">{sw.name}</span>
-                      <span className="text-sm text-gray-500">{sw.level}%</span>
+                    <div className="flex justify-between items-center mb-1.5 gap-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <SkillIcon icon={sw.icon} name={sw.name} color={sw.color} size={28} />
+                        <span className="text-sm font-medium truncate">{sw.name}</span>
+                      </div>
+                      <span className="text-sm text-gray-500 shrink-0">{sw.level}%</span>
                     </div>
                     <div className="h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-primary-500 to-blue-500 rounded-full" style={{ width: `${sw.level}%` }} />
+                      <div className="h-full rounded-full" style={{ width: `${sw.level}%`, background: sw.color || 'linear-gradient(to right, #3b82f6, #60a5fa)' }} />
                     </div>
                   </div>
                 ))}
